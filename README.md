@@ -46,7 +46,10 @@ After fixing the false alerts, I performed a network scan using Nmap to see if m
 
 I realized that I needed more data. My next step was to install Sysmon (System Monitor) on the Windows agent. Sysmon is a powerful tool that tracks much more than standard Windows Event Logs - it monitors network connections, process creations, and changes to file times.
 
-Instead of a blank screen, I could finally see the detailed activity of my system. The SIEM started catching things like suspicious PowerShell execution and discovery techniques. This proved that while Wazuh is the "brain," it needs good "eyes" like Sysmon to actually see the threats.
+After installing sysmon and configuration, instead of a blank screen, I could finally see the detailed activity of my system. The SIEM started catching things like suspicious PowerShell execution and discovery techniques. This proved that while Wazuh is the "brain," it needs good "eyes" like Sysmon to actually see the threats.
+
+<img width="789" height="507" alt="image" src="https://github.com/user-attachments/assets/6f93d2fc-e6b6-4ecd-a341-e6af4ac2e346" />
+
 
 <img width="1650" height="440" alt="image" src="https://github.com/user-attachments/assets/edf2929c-2b7d-4bab-92b9-4577f0b4d306" />
 
@@ -63,6 +66,25 @@ Wazuh caught this activity immediately. On the dashboard, I saw a Level 10 alert
 
 As you can see in the screenshot, the system also linked this event to the MITRE ATT&CK framework under the technique T1110 (Brute Force). This simple test proved that my SIEM was working correctly and could alert me in real-time if someone tried to break into my accounts.
 Manual guessing was easily detected, but I wanted to see how the system handles a much faster, automated attack. This led me to my next test: SSH Brute Force with Hydra.
+
+## Hydra attack
+
+After testing manual login attempts, I wanted to see how Wazuh handles a much faster, automated attack. I used Hydra to perform an SSH brute force attack against my Linux server.
+
+As you can see in the terminal, Hydra was attempting thousands of logins in a very short time.
+
+<img width="1019" height="107" alt="image" src="https://github.com/user-attachments/assets/c05d3e89-79b0-4df3-9a9d-4e7bc3048ae4" />
+
+
+The Results:
+The SIEM reacted perfectly. The dashboard immediately showed a massive spike in alerts. Because Hydra sends so many requests, Wazuh aggregated these events and triggered high-level alerts for Multiple authentication failures.
+<img width="1038" height="429" alt="image" src="https://github.com/user-attachments/assets/c709fad5-5f2f-4d4e-9cca-854f05e7837e" />
+<img width="1501" height="248" alt="image" src="https://github.com/user-attachments/assets/41210365-8c65-416e-9740-53220be4696f" />
+<img width="1534" height="360" alt="image" src="https://github.com/user-attachments/assets/6826bc39-56f8-4623-8d82-33b201ce5273" />
+
+
+
+This test was the most important part of the project. It proved that my home lab can successfully detect real-world hacking tools and provide a clear warning to a security analyst.
 
 
 
