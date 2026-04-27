@@ -86,6 +86,23 @@ The SIEM reacted perfectly. The dashboard immediately showed a massive spike in 
 
 This test was the most important part of the project. It proved that my home lab can successfully detect real-world hacking tools and provide a clear warning to a security analyst.
 
+## Monitoring file integrity (FIM)
+
+Another important test I conducted was monitoring specific directories for any unauthorized changes. I wanted to see if the SIEM could detect when a sensitive file is modified.
+
+I created a directory called /home/important/ and a file named dontopen.txt. I configured the Wazuh Syscheck module to monitor this folder in real-time.
+<img width="732" height="84" alt="image" src="https://github.com/user-attachments/assets/872946c2-f003-47e2-9aa4-2f6eb828cf73" />
+
+
+I originally wrote "1234567890" in the file. I then modified the file by adding the line "55555".
+
+<img width="629" height="135" alt="image" src="https://github.com/user-attachments/assets/bde9d933-827e-4587-8175-f32c60d19ece" />
+
+
+Wazuh detected the change immediately with a Level 7 alert. What’s most impressive is the level of detail: the system showed exactly what changed, including the file size and the old vs. new hashes (md5, sha1, and sha256). This proves that even if a hacker changes a single character in a sensitive file, the system will catch it and provide evidence for investigation.
+
+
+
 
 
 
