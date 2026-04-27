@@ -27,7 +27,7 @@ At this stage, the Windows machine was using only default logs. Later in the pro
 
 Before I started any network scans or security tests, I noticed a Level 7 alert in my Wazuh dashboard. The system claimed it found a trojan in the /usr/bin/diff file on my Ubuntu machine. This was very strange because I was using fresh, clean virtual machines. I didn't want to just ignore it, so I decided to check what was actually going on.
 
-Instead of just deleting the alert, I did a manual check. I used the sha256sum command to get the hash of the "suspicious" file on both of my Ubuntu machines.
+Instead of just deleting the alert, I did a manual check. I used the sha256sum command to get the hash of the "suspicious" file on both of my Ubuntu machines. I chose to verify the file using the SHA-256 algorithm becouse in modern security, it is much more reliable than MD5, which is vulnerable to collisions. By confirming the SHA-256 hash matched a known clean system, I could be 100% sure the file was safe before whitelisting it.
 
 <img width="1046" height="702" alt="image" src="https://github.com/user-attachments/assets/1356a8ba-1fc0-4351-b151-28565b754795" />
 
@@ -82,6 +82,8 @@ The SIEM reacted perfectly. The dashboard immediately showed a massive spike in 
 <img width="1501" height="248" alt="image" src="https://github.com/user-attachments/assets/41210365-8c65-416e-9740-53220be4696f" />
 <img width="1534" height="360" alt="image" src="https://github.com/user-attachments/assets/6826bc39-56f8-4623-8d82-33b201ce5273" />
 
+Detecting the attack is a success, but the final goal of a SOC is response. The next logical step would be to block the attacker's IP address, either manually by a security analyst or automatically through an IPS (Intrusion Prevention System) like Wazuh’s Active Response. This would cut off the brute-force attempt before the hacker can find a valid password.
+
 
 
 This test was the most important part of the project. It proved that my home lab can successfully detect real-world hacking tools and provide a clear warning to a security analyst.
@@ -100,6 +102,7 @@ I originally wrote "1234567890" in the file. I then modified the file by adding 
 
 
 Wazuh detected the change immediately with a Level 7 alert. What’s most impressive is the level of detail: the system showed exactly what changed, including the file size and the old vs. new hashes (md5, sha1, and sha256). This proves that even if a hacker changes a single character in a sensitive file, the system will catch it and provide evidence for investigation.
+
 
 ## Project summary
 
