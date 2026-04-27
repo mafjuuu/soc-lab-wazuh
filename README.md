@@ -25,14 +25,49 @@ At this stage, the Windows machine was using only default logs. Later in the pro
 
 ## Nmap scanning
 
-Before I started any security tests with Nmap, I spent some time looking at the Wazuh Dashboard. I noticed a strange alert (Level 7) coming from my Linux agent. The rootcheck module was flagging the /usr/bin/diff file as a potential threat.
+Before I started any network scans or security tests, I noticed a Level 7 alert in my Wazuh dashboard. The system claimed it found a trojan in the /usr/bin/diff file on my Ubuntu machine. This was very strange because I was using fresh, clean virtual machines. I didn't want to just ignore it, so I decided to check what was actually going on.
 
-<img width="1249" height="159" alt="image" src="https://github.com/user-attachments/assets/6d672837-10ba-461f-8cd5-6f5252134647" />
+Instead of just deleting the alert, I did a manual check. I used the sha256sum command to get the hash of the "suspicious" file on both of my Ubuntu machines.
+
+<img width="1046" height="702" alt="image" src="https://github.com/user-attachments/assets/1356a8ba-1fc0-4351-b151-28565b754795" />
+
+The hashes on both systems were exactly the same. This was 100% proof that the files were clean and had not been changed by any malware. It was just a False Positive (a mistake by the SIEM). To stop this alert from popping up again and "polluting" my dashboard, I went into the agent.conf file on the Wazuh Manager and added a rule to ignore that specific file.
+
+<img width="465" height="129" alt="image" src="https://github.com/user-attachments/assets/99609058-f91a-4d06-85d3-659b2f2edcf8" />
+
+By fixing this, I cleared the noise from my logs and could move on to more interesting tests, knowing that my environment was actually secure.
 
 
-I quickly checked the system and confirmed this was just a False Positive. The file was safe, but the SIEM was creating unnecessary "noise". To fix this, I decided to tune the configuration. I opened the agent.conf file on the Wazuh Manager and added a small piece of XML code to tell the system to ignore this specific file.
 
-<img width="549" height="156" alt="image" src="https://github.com/user-attachments/assets/73e88d6d-7dc2-483b-9566-c2dfe0080500" />
+After fixing the false alerts, I performed a network scan using Nmap to see if my SIEM would detect it. To my surprise, the dashboard showed no alerts at all. Wazuh didn't see the scan because the default Windows and Linux logs don't always track silent network probes.
+
+<img width="1201" height="328" alt="image" src="https://github.com/user-attachments/assets/76a22055-7882-43eb-a576-975472266d71" />
+
+
+I realized that I needed more data. My next step was to install Sysmon (System Monitor) on the Windows agent. Sysmon is a powerful tool that tracks much more than standard Windows Event Logs - it monitors network connections, process creations, and changes to file times.
+
+Instead of a blank screen, I could finally see the detailed activity of my system. The SIEM started catching things like suspicious PowerShell execution and discovery techniques. This proved that while Wazuh is the "brain," it needs good "eyes" like Sysmon to actually see the threats.
+
+<img width="1650" height="440" alt="image" src="https://github.com/user-attachments/assets/edf2929c-2b7d-4bab-92b9-4577f0b4d306" />
+
+## Password guessing
+
+After nmap scanning, I wanted to see how the system reacts to basic human activity. I tried to log in to the Linux machine by manually guessing passwords.
+
+Wazuh caught this activity immediately. On the dashboard, I saw a Level 10 alert (which is a high priority). The description was very clear:
+
+"User missed the password more than one time"
+
+<img width="1065" height="173" alt="image" src="https://github.com/user-attachments/assets/4821a5b7-bae7-4531-8721-2e2238a55ad6" />
+
+
+As you can see in the screenshot, the system also linked this event to the MITRE ATT&CK framework under the technique T1110 (Brute Force). This simple test proved that my SIEM was working correctly and could alert me in real-time if someone tried to break into my accounts.
+Manual guessing was easily detected, but I wanted to see how the system handles a much faster, automated attack. This led me to my next test: SSH Brute Force with Hydra.
+
+
+
+
+
 
 
 
