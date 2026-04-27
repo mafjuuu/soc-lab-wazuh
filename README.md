@@ -103,6 +103,9 @@ I originally wrote "1234567890" in the file. I then modified the file by adding 
 
 Wazuh detected the change immediately with a Level 7 alert. What’s most impressive is the level of detail: the system showed exactly what changed, including the file size and the old vs. new hashes (md5, sha1, and sha256). This proves that even if a hacker changes a single character in a sensitive file, the system will catch it and provide evidence for investigation.
 
+<img width="756" height="560" alt="image" src="https://github.com/user-attachments/assets/046869cd-3457-47ec-a208-a64cbd9620e4" />
+
+
 
 ## Project summary
 
