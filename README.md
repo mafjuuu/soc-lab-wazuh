@@ -23,7 +23,7 @@ I organized my workspace to see everything at once. I used a split-screen view t
 
 At this stage, the Windows machine was using only default logs. Later in the project, I upgraded this setup with Sysmon to get more detailed information.
 
-## Nmap scanning
+## Unexpected alert and quick investigation
 
 Before I started any network scans or security tests, I noticed a Level 7 alert in my Wazuh dashboard. The system claimed it found a trojan in the /usr/bin/diff file on my Ubuntu machine. This was very strange because I was using fresh, clean virtual machines. I didn't want to just ignore it, so I decided to check what was actually going on.
 
@@ -37,7 +37,7 @@ The hashes on both systems were exactly the same. This was 100% proof that the f
 
 By fixing this, I cleared the noise from my logs and could move on to more interesting tests, knowing that my environment was actually secure.
 
-
+## Nmap scanning
 
 After fixing the false alerts, I performed a network scan using Nmap to see if my SIEM would detect it. To my surprise, the dashboard showed no alerts at all. Wazuh didn't see the scan because the default Windows and Linux logs don't always track silent network probes.
 
@@ -100,6 +100,10 @@ I originally wrote "1234567890" in the file. I then modified the file by adding 
 
 
 Wazuh detected the change immediately with a Level 7 alert. What’s most impressive is the level of detail: the system showed exactly what changed, including the file size and the old vs. new hashes (md5, sha1, and sha256). This proves that even if a hacker changes a single character in a sensitive file, the system will catch it and provide evidence for investigation.
+
+## Project summary
+
+This project was a hands-on experiment in building and managing a SOC environment. Using Wazuh as the central brain, I learned how to collect logs, tune security rules, and bridge "visibility gaps" with tools like Sysmon. The lab taught me that security is not just about seeing alerts, but about understanding the data behind them. By running real-world attacks like Nmap and Hydra, I could see exactly how a SIEM detects suspicious behavior and how an analyst must respond to keep the network safe.
 
 
 
