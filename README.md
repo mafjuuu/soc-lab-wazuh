@@ -1,4 +1,4 @@
-# soc-lab-wazuh
+# home-lab-wazuh
 
 In this project, I wanted to step away from theory and see how real-time security monitoring works. I built a home lab to understand how a professional SOC (Security Operations Center) detects and responds to threats.
 
