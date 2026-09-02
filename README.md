@@ -25,7 +25,12 @@ At this stage, the Windows machine was using only default logs. Later in the pro
 
 ## Unexpected alert and quick investigation
 
-Before I started any network scans or security tests, I noticed a Level 7 alert in my Wazuh dashboard. The system claimed it found a trojan in the /usr/bin/diff file on my Ubuntu machine. This was very strange because I was using fresh, clean virtual machines. I didn't want to just ignore it, so I decided to check what was actually going on.
+Before I started any network scans or security tests, I noticed a Level 7 alert in my Wazuh dashboard. The system claimed it found a trojan in the /usr/bin/diff file on my Ubuntu machine.
+<img width="1213" height="124" alt="image" src="https://github.com/user-attachments/assets/75589a1c-1867-44d7-bb44-a2c8b4db4ef3" />
+<img width="1019" height="527" alt="image" src="https://github.com/user-attachments/assets/62205d58-c960-497d-91e5-2020ae4e7d14" />
+
+
+This was very strange because I was using fresh, clean virtual machines. I didn't want to just ignore it, so I decided to check what was actually going on.
 
 Instead of just deleting the alert, I did a manual check. I used the sha256sum command to get the hash of the "suspicious" file on both of my Ubuntu machines. I chose to verify the file using the SHA-256 algorithm becouse in modern security, it is much more reliable than MD5, which is vulnerable to collisions. By confirming the SHA-256 hash matched a known clean system, I could be 100% sure the file was safe before whitelisting it.
 
