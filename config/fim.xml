@@ -1,0 +1,5 @@
+<syscheck>
+    <disabled>no</disabled>
+    <frequency>43200</frequency>
+    <directories realtime="yes" report_changes="yes" check_all="yes">/home/important</directories>
+</syscheck>
